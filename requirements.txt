@@ -1,0 +1,7 @@
+dnspython==2.3.0
+ldap3==2.9.1
+ms-active-directory==1.12.1
+pyasn1==0.4.8
+pycryptodome==3.17
+pytz==2022.7.1
+six==1.16.0
