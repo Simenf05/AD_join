@@ -1,44 +1,18 @@
-from pyad import *
+from ldap3 import Server, Connection, ALL
 
-pyad.set_defaults(ldap_server="kuben.it", username="simen", password="Q2w3e4r5")
+server = Server('odin.kuben.it', get_info=ALL)
+conn = Connection(server, user="kuben\\simen", password="Q2w3e4r5")
 
-q = adquery.ADQuery()
-q.execute_query(
-    attributes=["sAMAccountName", "givenName", "sn", "mail"],
-    where_clause="objectClass='user'"
-)
+conn.bind()
 
-# Print user information
-for user in q.get_results():
-    print(user["sAMAccountName"], user["givenName"], user["sn"], user["mail"])
-
-"""
-server_name = "odin.kuben.it"
-domain_name = "odin.kuben.it"
-user_name = "simen"
-password = "Q2w3e4r5"
+print(conn.extend.standard.who_am_i())
 
 
-format_string = '{:25} {:>6} {:19} {:19} {}'
-print(format_string.format('User', 'Logins', 'Last Login', 'Expires', 'Description'))
+conn.search('dc=kuben,dc=it', '(&(ObjectClass=user)(GivenName=*))')
 
 
-server = Server(server_name, get_info=ALL)
-conn = Connection(server, user='{}\\{}'.format(domain_name, user_name), password=password, authentication=NTLM, auto_bind=True)
-conn.search('dc=odin,dc=kuben,dc=it', '(GivenName=Alf)')
 
-print(conn)
+print(conn.entries)
 
 
-domain = ADDomain('kuben.it')
-ldap = domain.get_ldap_uris()
-ldap2 = domain.get_ldap_servers()
-# session = ADSession(ldap, domain)
-
-# session = domain.create_session_as_user('simen@kuben.it', 'Q2w3e4r5')
-
-# users = session.find_users_by_common_name("Simen", ["GivenName"])
-
-print(domain)
-print(ldap)
-print(ldap2)"""
+conn.unbind()
